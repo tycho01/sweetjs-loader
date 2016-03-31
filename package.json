@@ -4,21 +4,27 @@
   "description": "Loader for sweetjs macros",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine-node test/"
+    "test": "jasmine test/sweet.spec.js"
   },
   "keywords": [
     "sweetjs",
     "webpack"
   ],
   "author": "James Long",
-  "contributors": ["Pete Hunt", "James Long"],
+  "contributors": [
+    "Pete Hunt",
+    "James Long",
+    "Tycho Grouwstra"
+  ],
   "license": "Apache 2",
   "dependencies": {
-    "loader-utils": "^0.2.1",
-    "rsvp": "^3.0.9"
+    "loader-utils": "^0.2.1"
   },
   "devDependencies": {
-    "jasmine-node": "^1.14.2",
-    "webpack": "^1.1.0-beta9"
+    "jasmine-core": "^2.4.1",
+    "webpack": "^1.12.14"
+  },
+  "peerDependencies": {
+    "sweet.js": "github:mozilla/sweet.js"
   }
 }

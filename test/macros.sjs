@@ -1,14 +1,11 @@
-macro id {
-  rule {
-    // after the macro name, match:
-    // (1) a open paren 
-    // (2) a single token and bind it to `$x`
-    // (3) a close paren
-    ($x)
-  } => {
-    // just return the token that is bound to `$x`
-    $x
-  }
-}
+// #lang "sweet.js"
 
-export id
+// export
+syntax id = function (ctx) {
+  let bodyCtx = ctx.next().value.inner();
+  let result = #``;
+  for (let stx of bodyCtx) {
+    result = result.concat(#`${stx}`);
+  }
+  return result;
+}

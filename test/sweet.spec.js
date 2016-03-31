@@ -1,41 +1,38 @@
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
+var opts = require('./webpack.config.js');
 
-describe('sweet-loader', function() {
-  it('should pretty much work', function() {
-    var done = false;
+describe('sweet-loader', () => {
 
-    runs(function() {
-      var BUNDLE_PATH = path.join(__dirname, 'bundle.js');
+  // beforeEach(() => {})
 
-      if (fs.existsSync(BUNDLE_PATH)) {
-	fs.unlinkSync(BUNDLE_PATH);
-      }
+  it('should work', (done) => {
+    var PATH = path.join(__dirname, 'basic.out.js');
+    if (fs.existsSync(PATH)) fs.unlinkSync(PATH);
 
-      webpack({
-	cache: true,
-	entry: path.join(__dirname, 'basic.js'),
-	output: {
-	  filename: BUNDLE_PATH
-	},
-	module: {
-	  loaders: [
-	    {
-	      test: /\.js$/,
-	      loader: path.join(__dirname, '../index') + '?modules[]=' + path.join(__dirname, './macros.sjs')
-	    }
-	  ]
-	}
-      }, function(err, stats) {
-	expect(err).toBe(null);
-	var content = fs.readFileSync(BUNDLE_PATH, {encoding: 'utf8'});
-	expect(content.indexOf('42') > -1).toBe(true);
-	expect(content.indexOf('id(')).toBe(-1);
-	done = true;
-      });
+    webpack(opts, function(err, stats) {
+    	expect(err).toBe(null);
+      expect(fs.existsSync(PATH)).toBe(true);
+    	var content = fs.readFileSync(PATH, {encoding: 'utf8'});
+    	expect(content.indexOf('42') > -1).toBe(true);
+    	expect(content.indexOf('id(')).toBe(-1);
+    	done();
     });
-
-    waitsFor(function() { return done; });
   });
+
+  it('even for remote files', (done) => {
+    var PATH = path.join(__dirname, 'remote.out.js');
+    if (fs.existsSync(PATH)) fs.unlinkSync(PATH);
+
+    webpack(opts, function(err, stats) {
+    	expect(err).toBe(null);
+      expect(fs.existsSync(PATH)).toBe(true);
+    	var content = fs.readFileSync(PATH, {encoding: 'utf8'});
+    	expect(content.indexOf('35') > -1).toBe(true);
+    	expect(content.indexOf('id(')).toBe(-1);
+    	done();
+    });
+  });
+
 });
